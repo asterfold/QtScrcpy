@@ -50,7 +50,7 @@
 ## 示例与使用
 
 三角洲配置已按用户提供的键位另行加入，见 [三角洲配置说明](deltaforce_zh.md)。
-`keymap/deltaforce.json` 启用小幅范围落点，`keymap/deltaforce-original.json` 保留原文件用于回退。
+`keymap/deltaforce.json` 是唯一正式三角洲配置，旧版可从 Git 历史找回；当前范围见三角洲配置说明。
 
 `keymap/floating-origin-demo.json` 是独立触控测试示例，包含 WASD、F、鼠标左键。
 其中坐标不是三角洲布局，没有提供未经确认的游戏键位。
@@ -78,5 +78,13 @@ W/D 组合及反向按键、快速按下松开、键盘与鼠标按钮保持同�
 ## 仓库结构
 
 输入实现位于上游的 `QtScrcpy/QtScrcpyCore` Git 子模块；文档和示例在主仓库。
-本地两个仓库均使用 `minghao/stable-touch-origin` 分支，未提交、未推送。
+两个 fork 使用 `minghao/stable-touch-origin` 分支，主仓库锁定配套 Core 提交。
 远程保存时必须同时处理核心子模块的改动，单独推送主仓库无法包含未提交的核心修改。
+
+## 可选疾跑修饰键
+
+浮动摇杆节点可同时设置 `sprintKey: "Key_Shift"` 和 `sprintUpOffset: 0.27`。
+按住前进和修饰键时使用扩展上拉行程；松开修饰键恢复 `upOffset`。
+修饰键单独不创建触点，也不改变侧移/后退。切换行程保持同一起点和触点编号。
+扩展行程必须不少于普通行程，整个范围不得越过屏幕边界；修饰键不能与方向键或映射开关键相同。
+关闭映射或重载脚本会释放触点并重置疾跑状态。实际是否触发游戏疾跑由游戏摇杆阈值决定。
