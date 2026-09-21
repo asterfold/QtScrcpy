@@ -1,0 +1,34 @@
+{
+  "switchKey": "Key_QuoteLeft",
+  "keyMapNodes": [
+    {
+      "comment": "仅用于触控测试：坐标不是三角洲键位。需浮动摇杆，自行校准区域。删除 floatingOriginRange 恢复原模式。",
+      "type": "KMT_STEER_WHEEL",
+      "centerPos": {"x": 0.3, "y": 0.5},
+      "floatingOriginRange": {"x": 0.01, "y": 0.01},
+      "leftKey": "Key_A",
+      "rightKey": "Key_D",
+      "upKey": "Key_W",
+      "downKey": "Key_S",
+      "leftOffset": 0.1,
+      "rightOffset": 0.1,
+      "upOffset": 0.1,
+      "downOffset": 0.1
+    },
+    {
+      "comment": "测试按钮：一次按住期间不重新选点。范围必须完全落在真实按钮内。",
+      "type": "KMT_CLICK",
+      "key": "Key_F",
+      "switchMap": false,
+      "pos": {"x": 0.8, "y": 0.8},
+      "touchRange": {"x": 0.01, "y": 0.01}
+    },
+    {
+      "type": "KMT_CLICK",
+      "key": "LeftButton",
+      "switchMap": false,
+      "pos": {"x": 0.7, "y": 0.8},
+      "touchRange": {"x": 0.01, "y": 0.01}
+    }
+  ]
+}

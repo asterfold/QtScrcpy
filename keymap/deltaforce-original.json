@@ -1,0 +1,230 @@
+{
+	"switchKey": "Key_QuoteLeft",
+	"mouseMoveMap": {
+		"startPos": {
+			"x": 0.57,
+			"y": 0.26
+		},
+		"speedRatioX": 3.25,
+		"speedRatioY": 1.25,
+		"smallEyes": {
+			"comment": "小眼睛",
+			"type": "KMT_CLICK",
+			"key": "Key_Alt",
+			"pos": {
+				"x": 0.8,
+				"y": 0.31
+			},
+			"switchMap": false
+		},
+		"speedRatio": 10
+	},
+	"keyMapNodes": [
+		{
+			"comment": "方向盘",
+			"type": "KMT_STEER_WHEEL",
+			"centerPos": {
+				"x": 0.16,
+				"y": 0.75
+			},
+			"leftOffset": 0.1,
+			"rightOffset": 0.1,
+			"upOffset": 0.27,
+			"downOffset": 0.2,
+			"leftKey": "Key_A",
+			"rightKey": "Key_D",
+			"upKey": "Key_W",
+			"downKey": "Key_S"
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_Space",
+			"pos": {
+				"x": 0.9244444670500579,
+				"y": 0.7065476235889253
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_R",
+			"pos": {
+				"x": 0.7540740966796875,
+				"y": 0.8226190521603539
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_C",
+			"pos": {
+				"x": 0.8262963189019097,
+				"y": 0.9297619093032111
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_Z",
+			"pos": {
+				"x": 0.9059259485315394,
+				"y": 0.8821428616841634
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_1",
+			"pos": {
+				"x": 0.4485185411241319,
+				"y": 0.9148809569222587
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_2",
+			"pos": {
+				"x": 0.5355555781611689,
+				"y": 0.9178571473984491
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_M",
+			"pos": {
+				"x": 0.14111113371672454,
+				"y": 0.20357143311273485
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_Q",
+			"pos": {
+				"x": 0.1614815040870949,
+				"y": 0.4089285759698777
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_E",
+			"pos": {
+				"x": 0.21888891149450232,
+				"y": 0.4178571473984492
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_F",
+			"pos": {
+				"x": 0.6670370596426505,
+				"y": 0.248214290255592
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_Tab",
+			"pos": {
+				"x": 0.07814817075376157,
+				"y": 0.9059523854936873
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_H",
+			"pos": {
+				"x": 0.31333335593894673,
+				"y": 0.6202380997794015
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_Esc",
+			"pos": {
+				"x": 0.9331650345413773,
+				"y": 0.049512988045102076
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_5",
+			"pos": {
+				"x": 0.3405724419487847,
+				"y": 0.9096320356641497
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_V",
+			"pos": {
+				"x": 0.8479798493561921,
+				"y": 0.35308441661653067
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_X",
+			"pos": {
+				"x": 0.9276094789858218,
+				"y": 0.36201298804510207
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "Key_G",
+			"pos": {
+				"x": 0.6590909604673032,
+				"y": 0.9036796547117688
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "LeftButton",
+			"pos": {
+				"x": 0.8313131826895255,
+				"y": 0.7429653689974831
+			},
+			"switchMap": false
+		},
+		{
+			"comment": "新键位",
+			"type": "KMT_CLICK",
+			"key": "RightButton",
+			"pos": {
+				"x": 0.9202020715784144,
+				"y": 0.5405844166165307
+			},
+			"switchMap": false
+		}
+	]
+}
