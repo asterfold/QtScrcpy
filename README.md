@@ -1,5 +1,56 @@
 # QtScrcpy 
 
+## Windows Codex 交接说明（本 fork）
+
+本修改位于 [`minghao/stable-touch-origin`](https://github.com/asterfold/QtScrcpy/tree/minghao/stable-touch-origin) 分支。
+下面整段可直接复制给 Windows 上的 Codex。主仓库已锁定修改后的 Core 子模块；需要递归克隆，不能只下载 ZIP。
+下方原项目的构建徽章和发布链接属于上游，不代表本修改版已通过 Windows 验证。
+
+```text
+请获取我们修改过的 QtScrcpy，并在 Windows 上编译、测试和打包。
+
+主仓库：https://github.com/asterfold/QtScrcpy
+分支：minghao/stable-touch-origin
+
+首次获取执行：
+git clone --recurse-submodules --branch minghao/stable-touch-origin https://github.com/asterfold/QtScrcpy.git
+
+必须带 --recurse-submodules：修改涉及 QtScrcpyCore 子模块，主仓库已经锁定配套版本。
+Core 仓库：https://github.com/asterfold/QtScrcpyCore
+不要改用上游 Core、默认分支或 submodule update --remote。
+如果本地已有仓库，先检查分支和工作区，保留已有改动，再获取目标分支，执行：
+git submodule sync --recursive
+git submodule update --init --recursive
+
+已实现：
+- WASD、19 个点击按钮、鼠标转视角和 Alt 自由观察的随机起点。
+- 每段触控只随机一次，长按不持续漂移，视角保留原相对位移和灵敏度。
+- 三角洲配置：keymap/deltaforce.json。
+- 原始配置备份：keymap/deltaforce-original.json。
+
+先阅读：
+- docs/deltaforce_zh.md
+- docs/floating-origin_zh.md
+- QtScrcpy/QtScrcpyCore/tests/CMakeLists.txt
+- ci/win/ 下的构建和打包脚本
+- .github/workflows/windows.yml（上游流程，需核对本 fork 可用性）
+
+交接时的验证状态：
+macOS 编译成功，两项自动化测试通过；Windows 尚未构建或实机验证，
+没有现成的新版 exe。此前 push 没有触发 GitHub Actions。
+
+请完成 Windows 构建、运行映射测试，并打包包含依赖和键位配置的可运行程序。
+测试项目在 QtScrcpy/QtScrcpyCore/tests；配置 TOUCH_PROFILE 为
+keymap/deltaforce.json 的绝对路径，以运行实际三角洲配置测试。
+Windows 多配置生成器运行 ctest 时，需要用 -C 指定实际构建配置。
+
+准确区分编译通过、自动化测试通过与手机实测。
+随机范围没有自动识别按钮边界，仍需手机校准；不要宣称能防封号。
+```
+
+详细说明：[三角洲配置](docs/deltaforce_zh.md) · [随机起点参数](docs/floating-origin_zh.md)。
+
+
 [![Financial Contributors to Open Collective](https://opencollective.com/QtScrcpy/all/badge.svg?label=financial+contributors)](https://opencollective.com/QtScrcpy)
 ![Windows](https://github.com/barry-ran/QtScrcpy/workflows/Windows/badge.svg)
 ![MacOS](https://github.com/barry-ran/QtScrcpy/workflows/MacOS/badge.svg)

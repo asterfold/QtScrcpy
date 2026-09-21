@@ -1,5 +1,7 @@
 # QtScrcpy
 
+Windows 修改版的获取、编译和测试交接内容见 [README 中可直接复制给 Codex 的说明](README.md#windows-codex-交接说明本-fork)。
+
 ![Windows](https://github.com/barry-ran/QtScrcpy/workflows/Windows/badge.svg)
 ![MacOS](https://github.com/barry-ran/QtScrcpy/workflows/MacOS/badge.svg)
 ![Ubuntu](https://github.com/barry-ran/QtScrcpy/workflows/Ubuntu/badge.svg)
