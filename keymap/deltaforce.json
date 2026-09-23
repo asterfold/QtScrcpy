@@ -135,6 +135,20 @@
       }
     },
     {
+      "comment": "武器3（底部武器栏最右侧，匕首图标下方；小范围随机落点）",
+      "type": "KMT_CLICK",
+      "key": "Key_3",
+      "pos": {
+        "x": 0.593,
+        "y": 0.918
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
       "comment": "新键位",
       "type": "KMT_CLICK",
       "key": "Key_M",
@@ -188,6 +202,20 @@
       "touchRange": {
         "x": 0.04,
         "y": 0
+      }
+    },
+    {
+      "comment": "搜索（枪械框左侧纸张图标；鼠标下侧键暂按后退键配置；小范围随机落点）",
+      "type": "KMT_CLICK",
+      "key": "BackButton",
+      "pos": {
+        "x": 0.605,
+        "y": 0.257
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
       }
     },
     {

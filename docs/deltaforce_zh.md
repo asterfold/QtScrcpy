@@ -1,7 +1,7 @@
 # 三角洲行动：Samsung S26 键位
 
 正式配置只有 `keymap/deltaforce.json`，整合最新截图校准。旧配置保留在 Git 历史中。
-配置共 21 个节点：1 个 WASD 摇杆和 20 个点击按钮。必须配合主仓库锁定的修改版 Core。
+配置共 23 个节点：1 个 WASD 摇杆和 22 个点击按钮。必须配合主仓库锁定的修改版 Core。
 
 ## 主要按键
 
@@ -9,8 +9,10 @@
 | --- | --- |
 | W/A/S/D | 移动；W 上拉行程 0.08 |
 | W + Shift | 上拉行程扩展为 0.27；Shift 单独不点击疾跑按钮 |
+| 1 / 2 / 3 | 武器栏；3 对应匕首图标下方的最右侧武器格 |
 | Q / E | 左 / 右探头 |
 | F | 枪械框下方问号/钥匙交互长条；拾取、开门、搜索需分别实测 |
+| 鼠标下侧键（暂按后退键 BackButton） | 枪械框左侧纸张图标；搜索功能需实测，若实际下侧键上报为前进键则改为 ForwardButton |
 | Tab | 背包 |
 | H | 左侧双人图标（背人） |
 | CapsLock | 静步图标 |
@@ -31,7 +33,7 @@
 
 - 摇杆中心为 (0.16, 0.75)，起点水平/垂直各随机 ±0.04。
 - F 中心为 (0.697947, 0.347503)，仅水平随机 ±0.04，上下固定。
-- Tab、H、CapsLock、Escape 固定点击，其余点击按钮水平/垂直各 ±0.002。
+- Tab、H、CapsLock、Escape 固定点击；3 和鼠标下侧键水平/垂直各 ±0.002，其他一般按钮同样是小范围随机。
 - 视角和 Alt 起点水平/垂直各 ±0.002，相对鼠标位移和灵敏度沿用原配置。
 
 每段触控只随机一次，长按不持续漂移。W 与 Shift 的按下顺序均可；松开 Shift 恢复普通行程，
@@ -47,7 +49,7 @@
 ## 验证状态
 
 - Windows：MSVC 2022 + Qt 5.15.2，RelWithDebInfo 编译成功；已打包 Qt、ADB、FFmpeg 等依赖。
-- 两项自动化测试通过，实际配置测试覆盖 21 个节点、Shift 行程切换、触点保持、释放与长按不漂移。
+- 两项自动化测试通过，实际配置测试覆盖 23 个节点、Shift 行程切换、触点保持、释放与长按不漂移。
 - 三星手机 USB 连接及投屏已运行；按键配置依据用户截图调整，不能等同于所有游戏操作实测通过。
 - F 的拾取、开门、搜索及所有布局边界仍需手机校准。没有验证防封效果，不承诺防封。
 - 可视化配置编辑器未适配新增字段，保存时需核对是否保留。
@@ -55,7 +57,7 @@
 Windows PowerShell，在仓库根目录（将 Qt 路径替换为本机安装路径）：
 
 ```powershell
-cmake -S QtScrcpy/QtScrcpyCore/tests -B build-touch-tests -DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 "-DTOUCH_PROFILE=$((Resolve-Path keymap/deltaforce.json).Path)" -DTOUCH_PROFILE_EXPECTED_NODES=21
+cmake -S QtScrcpy/QtScrcpyCore/tests -B build-touch-tests -DCMAKE_PREFIX_PATH=C:/Qt/5.15.2/msvc2019_64 "-DTOUCH_PROFILE=$((Resolve-Path keymap/deltaforce.json).Path)" -DTOUCH_PROFILE_EXPECTED_NODES=23
 cmake --build build-touch-tests --config RelWithDebInfo --parallel
 ctest --test-dir build-touch-tests -C RelWithDebInfo --output-on-failure
 ```
