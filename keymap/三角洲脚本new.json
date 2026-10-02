@@ -1,0 +1,362 @@
+{
+  "switchKey": "Key_QuoteLeft",
+  "mouseMoveMap": {
+    "startPos": {
+      "x": 0.564854,
+      "y": 0.316268
+    },
+    "speedRatioX": 3.25,
+    "speedRatioY": 1.25,
+    "speedRatio": 10,
+    "startPosRange": {
+      "x": 0.002,
+      "y": 0.002
+    },
+    "smallEyes": {
+      "comment": "自由观察禁用（未分配 Alt 或其他实体按键）",
+      "type": "KMT_CLICK",
+      "key": "Key_unknown",
+      "pos": {
+        "x": 0.564854,
+        "y": 0.316268
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "keyMapNodes": [
+    {
+      "comment": "方向盘（2026-10-02 用户确认新图；中心下移，下行程缩至0.08以避免越界；保留 Shift 冲刺）",
+      "type": "KMT_STEER_WHEEL",
+      "centerPos": {
+        "x": 0.175209,
+        "y": 0.850967
+      },
+      "leftOffset": 0.1,
+      "rightOffset": 0.1,
+      "upOffset": 0.08,
+      "downOffset": 0.08,
+      "leftKey": "Key_A",
+      "rightKey": "Key_D",
+      "upKey": "Key_W",
+      "downKey": "Key_S",
+      "floatingOriginRange": {
+        "x": 0.04,
+        "y": 0.04
+      },
+      "sprintKey": "Key_Shift",
+      "sprintUpOffset": 0.27
+    },
+    {
+      "comment": "跳跃（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_Space",
+      "pos": {
+        "x": 0.212866,
+        "y": 0.178612
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "换弹（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_R",
+      "pos": {
+        "x": 0.72751,
+        "y": 0.795222
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "蹲下（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_C",
+      "pos": {
+        "x": 0.197699,
+        "y": 0.406143
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "趴下（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_Z",
+      "pos": {
+        "x": 0.813808,
+        "y": 0.882821
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "武器1（竖排最上方步枪格）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_1",
+      "pos": {
+        "x": 0.570084,
+        "y": 0.730375
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "武器2（竖排中间步枪格）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_2",
+      "pos": {
+        "x": 0.537134,
+        "y": 0.829352
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "近战武器（竖排最下方匕首格）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_3",
+      "pos": {
+        "x": 0.536611,
+        "y": 0.913538
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "地图（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_M",
+      "pos": {
+        "x": 0.361925,
+        "y": 0.139932
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "左探头（右侧两按钮中的左按钮）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_Q",
+      "pos": {
+        "x": 0.811715,
+        "y": 0.540387
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "右探头（右侧两按钮中的右按钮）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_E",
+      "pos": {
+        "x": 0.892259,
+        "y": 0.538111
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "交互（问号长条；仅水平随机）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_F",
+      "pos": {
+        "x": 0.514644,
+        "y": 0.523322
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.04,
+        "y": 0
+      }
+    },
+    {
+      "comment": "搜索（枪械框左侧纸张图标；鼠标后退侧键）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "BackButton",
+      "pos": {
+        "x": 0.41841,
+        "y": 0.435722
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "背包（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_Tab",
+      "pos": {
+        "x": 0.056485,
+        "y": 0.560865
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "comment": "背人（双人图标）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_H",
+      "pos": {
+        "x": 0.706067,
+        "y": 0.662116
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "comment": "设置（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_Escape",
+      "pos": {
+        "x": 0.946653,
+        "y": 0.051195
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "comment": "消耗品（罐状图标）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_5",
+      "pos": {
+        "x": 0.654812,
+        "y": 0.864619
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "战术道具1 / 技能（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_V",
+      "pos": {
+        "x": 0.754707,
+        "y": 0.091013
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "特殊装备（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_X",
+      "pos": {
+        "x": 0.80387,
+        "y": 0.369738
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "战术道具2 / 技能（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_G",
+      "pos": {
+        "x": 0.758368,
+        "y": 0.243458
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "开火（左上大子弹按钮）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "LeftButton",
+      "pos": {
+        "x": 0.078975,
+        "y": 0.211604
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "开镜（右上大准星按钮）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "RightButton",
+      "pos": {
+        "x": 0.86454,
+        "y": 0.174061
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0.002,
+        "y": 0.002
+      }
+    },
+    {
+      "comment": "静步（斜线脚印图标）（2026-10-02 用户确认新图）",
+      "type": "KMT_CLICK",
+      "key": "Key_CapsLock",
+      "pos": {
+        "x": 0.652197,
+        "y": 0.76223
+      },
+      "switchMap": false,
+      "touchRange": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  ]
+}
