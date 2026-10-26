@@ -4,6 +4,42 @@
 <context>
     <name>Dialog</name>
     <message>
+        <source>Mirror screen:</source>
+        <translation>投屏目标：</translation>
+    </message>
+    <message>
+        <source>Phone screen</source>
+        <translation>手机屏幕</translation>
+    </message>
+    <message>
+        <source>Advanced display settings</source>
+        <translation>使用高级显示设置</translation>
+    </message>
+    <message>
+        <source>Refresh displays</source>
+        <translation>刷新显示器</translation>
+    </message>
+    <message>
+        <source>External display: %1</source>
+        <translation>外接显示器：%1</translation>
+    </message>
+    <message>
+        <source>Display: %1</source>
+        <translation>显示屏：%1</translation>
+    </message>
+    <message>
+        <source>Selected display is disconnected</source>
+        <translation>已选显示器未连接</translation>
+    </message>
+    <message>
+        <source>Could not read displays. Reconnect the phone and refresh displays.</source>
+        <translation>无法读取显示器，请重新连接手机后刷新。</translation>
+    </message>
+    <message>
+        <source>Connect the selected display or choose another screen.</source>
+        <translation>请连接已选显示器，或选择其他屏幕。</translation>
+    </message>
+    <message>
         <source>show</source>
         <translation>显示</translation>
     </message>

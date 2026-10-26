@@ -52,7 +52,15 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_MACOS
-    qputenv("QTSCRCPY_ADB_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/mac/adb");
+    // Preserve an explicit override. Prefer the separately installed official
+    // ADB when available, so updating the helper also updates the app's daemon.
+    if (qgetenv("QTSCRCPY_ADB_PATH").isEmpty()) {
+        QString adbPath = Config::getInstance().getAdbPath();
+        const QString updatedAdb = QDir::homePath() + "/Library/Application Support/QtScrcpy-WiFi/adb";
+        if (adbPath.isEmpty() && QFileInfo(updatedAdb).isExecutable()) { adbPath = updatedAdb; }
+        if (adbPath.isEmpty()) { adbPath = QDir(executableDir).filePath("adb"); }
+        qputenv("QTSCRCPY_ADB_PATH", adbPath.toLocal8Bit());
+    }
     qputenv("QTSCRCPY_SERVER_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
 #endif
 

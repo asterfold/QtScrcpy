@@ -5,8 +5,8 @@
       "x": 0.564854,
       "y": 0.316268
     },
-    "speedRatioX": 3.25,
-    "speedRatioY": 1.25,
+    "speedRatioX": 6.5,
+    "speedRatioY": 2.5,
     "speedRatio": 10,
     "startPosRange": {
       "x": 0.002,
@@ -28,6 +28,13 @@
     }
   },
   "keyMapNodes": [
+    {
+      "comment": "切换倍镜倍率（跳跃右侧倍率按钮；鼠标滚轮向下）",
+      "type": "KMT_CLICK",
+      "key": "WheelDown",
+      "pos": { "x": 0.2915, "y": 0.2952 },
+      "switchMap": false
+    },
     {
       "comment": "方向盘（2026-10-02 用户确认新图；中心下移，下行程缩至0.08以避免越界；保留 Shift 冲刺）",
       "type": "KMT_STEER_WHEEL",
@@ -156,11 +163,7 @@
         "x": 0.361925,
         "y": 0.139932
       },
-      "switchMap": false,
-      "touchRange": {
-        "x": 0.002,
-        "y": 0.002
-      }
+      "switchMap": false
     },
     {
       "comment": "左探头（右侧两按钮中的左按钮）（2026-10-02 用户确认新图）",
@@ -226,11 +229,7 @@
         "x": 0.056485,
         "y": 0.560865
       },
-      "switchMap": false,
-      "touchRange": {
-        "x": 0,
-        "y": 0
-      }
+      "switchMap": false
     },
     {
       "comment": "背人（双人图标）（2026-10-02 用户确认新图）",

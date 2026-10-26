@@ -18,6 +18,9 @@ public:
     void initMouseEventTap() override;
     void quitMouseEventTap() override;
     void enableMouseEventTap(QRect rc, bool enabled) override;
+    void setRelativeMotionHandler(QWidget *owner, std::function<void(QPointF)> handler) override;
+    bool hasRelativeCapture() const override;
+    void releaseRelativeMotionHandler(QWidget *owner) override;
 
 protected:
     void run() override;

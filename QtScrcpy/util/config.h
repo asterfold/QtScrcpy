@@ -34,6 +34,7 @@ struct UserBootConfig
     bool advancedDisplay = false;
     int displayMode = 0;
     QString displayId;
+    QString displayUniqueId;
     QString newDisplay;
     QString crop;
     bool flexDisplay = false;

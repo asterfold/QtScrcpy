@@ -14,6 +14,7 @@
 #include "../QtScrcpyCore/include/QtScrcpyCore.h"
 #include "audio/audiooutput.h"
 #include "presetconfigdialog.h"
+#include "../util/logbuffer.h"
 
 namespace Ui
 {
@@ -27,6 +28,7 @@ class QCheckBox;
 class QGroupBox;
 class QPushButton;
 class QSpinBox;
+class WifiConnection;
 class Dialog : public QWidget
 {
     Q_OBJECT
@@ -100,6 +102,8 @@ private:
     void saveAdvancedConfig();
     void openUserDirectory(const QString &path);
     void refreshApps();
+    void refreshDisplays(bool startAfterRefresh = false);
+    void selectDisplayTarget(int index);
     void updateVideoSourceUi();
     void initAdvancedDisplayUi();
     void updateAdvancedDisplayUi();
@@ -117,6 +121,7 @@ protected:
 private:
     Ui::Widget *ui;
     qsc::AdbProcess m_adb;
+    QPointer<WifiConnection> m_wifiConnection;
     QSystemTrayIcon *m_hideIcon;
     QGroupBox *m_advancedDisplayGroup = nullptr;
     QComboBox *m_configLanguageBox = nullptr;
@@ -130,6 +135,12 @@ private:
     QLineEdit *m_configCodecOptionsEdit = nullptr;
     QLineEdit *m_configCodecNameEdit = nullptr;
     QComboBox *m_configLogLevelBox = nullptr;
+    QComboBox *m_displayTargetBox = nullptr;
+    QPushButton *m_refreshDisplaysBtn = nullptr;
+    QPointer<qsc::AdbProcess> m_displayQuery;
+    QString m_displayListSerial;
+    QString m_displayUniqueId;
+    bool m_startWithResolvedDisplay = false;
     QComboBox *m_displayModeBox = nullptr;
     QLineEdit *m_displayIdEdit = nullptr;
     QLineEdit *m_newDisplayEdit = nullptr;
@@ -146,6 +157,8 @@ private:
     QAction *m_quit;
     AudioOutput m_audioOutput;
     QTimer m_autoUpdatetimer;
+    LogBuffer m_logBuffer;
+    QTimer m_logFlushTimer;
     quint32 m_prevBitRate = 2000000;
     int m_prevMaxSizeIndex = 0;
     QPointer<PresetConfigDialog> m_presetDialog;

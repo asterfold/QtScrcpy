@@ -104,6 +104,8 @@ private:
     bool m_preventAutoResize = false;
     QTimer m_flexResizeTimer;
     QSize m_pendingDisplaySize;
+    quint64 m_diagnosticMoves = 0;
+    quint64 m_diagnosticForwarded = 0;
 
     //Whether to display the toolbar when connecting a device.
     bool show_toolbar = true;

@@ -1,6 +1,8 @@
 #ifndef MOUSETAP_H
 #define MOUSETAP_H
 #include <QRect>
+#include <QPointF>
+#include <functional>
 
 class QWidget;
 class MouseTap
@@ -11,6 +13,9 @@ public:
     virtual void quitMouseEventTap() = 0;
     // rc base global screenspace coordinate system, which has a flipped Y.
     virtual void enableMouseEventTap(QRect rc, bool enabled) = 0;
+    virtual void setRelativeMotionHandler(QWidget *, std::function<void(QPointF)>) {}
+    virtual bool hasRelativeCapture() const { return false; }
+    virtual void releaseRelativeMotionHandler(QWidget *) {}
 
 private:
     static MouseTap *s_instance;

@@ -16,6 +16,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRandomGenerator>
+#include <QSignalBlocker>
+#include <QLabel>
 #include <QRegularExpression>
 #include <QSizePolicy>
 #include <QScreen>
@@ -26,11 +28,15 @@
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QTime>
+#include <QTextCursor>
+#include <QTextDocument>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QUrl>
 
 #include "config.h"
+#include "../util/displaylist.h"
+#include "../util/wificonnection.h"
 #include "dialog.h"
 #include "ui_dialog.h"
 #include "videoform.h"
@@ -103,6 +109,17 @@ void initializeKeyMapDirectory()
 Dialog::Dialog(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    ui->outEdit->document()->setMaximumBlockCount(1000);
+    connect(&m_logFlushTimer, &QTimer::timeout, this, [this] {
+        const QString batch = m_logBuffer.takeBatch();
+        if (batch.isEmpty()) { return; }
+        QTextCursor cursor(ui->outEdit->document());
+        cursor.movePosition(QTextCursor::End);
+        cursor.insertText(batch + '\n');
+        ui->outEdit->setTextCursor(cursor);
+        ui->outEdit->ensureCursorVisible();
+    });
+    m_logFlushTimer.start(100);
     initUI();
 
     updateBootConfig(true);
@@ -152,6 +169,7 @@ Dialog::Dialog(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
         case qsc::AdbProcess::AER_SUCCESS_EXEC:
             //log = m_adb.getStdOut();
             if (args.contains("devices")) {
+                const QString selected = ui->serialBox->currentText();
                 QStringList devices = m_adb.getDevicesSerialFromStdOut();
                 ui->serialBox->clear();
                 ui->connectedPhoneList->clear();
@@ -159,6 +177,8 @@ Dialog::Dialog(QWidget *parent) : QWidget(parent), ui(new Ui::Widget)
                     ui->serialBox->addItem(item);
                     ui->connectedPhoneList->addItem(Config::getInstance().getNickName(item) + "-" + item);
                 }
+                const int selectedIndex = ui->serialBox->findText(selected);
+                if (selectedIndex >= 0) { ui->serialBox->setCurrentIndex(selectedIndex); }
             } else if (args.contains("show") && args.contains("wlan0")) {
                 QString ip = m_adb.getDeviceIPFromStdOut();
                 if (ip.isEmpty()) {
@@ -321,6 +341,21 @@ void Dialog::initUI()
 
     ui->verticalLayout_5->addWidget(ui->usbGroupBox);
     ui->verticalLayout_5->addWidget(ui->wirelessGroupBox);
+    auto *displaySelection = new QHBoxLayout();
+    displaySelection->addWidget(new QLabel(tr("Mirror screen:"), startConfigPage));
+    m_displayTargetBox = new QComboBox(startConfigPage);
+    m_displayTargetBox->setObjectName("displayTargetBox");
+    m_displayTargetBox->addItem(tr("Phone screen"), "primary");
+    m_displayTargetBox->setItemData(0, 0, Qt::UserRole + 1);
+    m_displayTargetBox->addItem(tr("Advanced display settings"), "advanced");
+    m_displayTargetBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_refreshDisplaysBtn = new QPushButton(tr("Refresh displays"), startConfigPage);
+    m_refreshDisplaysBtn->setObjectName("refreshDisplaysBtn");
+    displaySelection->addWidget(m_displayTargetBox, 1);
+    displaySelection->addWidget(m_refreshDisplaysBtn);
+    startConfigLayout->addLayout(displaySelection);
+    connect(m_refreshDisplaysBtn, &QPushButton::clicked, this, [this] { refreshDisplays(); });
+    connect(m_displayTargetBox, QOverload<int>::of(&QComboBox::activated), this, &Dialog::selectDisplayTarget);
     startConfigLayout->addWidget(ui->configGroupBox);
     startConfigLayout->addWidget(ui->adbGroupBox);
     startConfigLayout->addWidget(ui->outEdit, 1);
@@ -630,6 +665,11 @@ void Dialog::updateBootConfig(bool toView)
             m_advancedDisplayGroup->setChecked(config.advancedDisplay);
             m_displayModeBox->setCurrentIndex(qBound(0, config.displayMode, 2));
             m_displayIdEdit->setText(config.displayId);
+            m_displayUniqueId = config.displayUniqueId;
+            if (m_displayUniqueId.isEmpty()) {
+                m_displayUniqueId = config.advancedDisplay && config.displayMode != 0 ? "advanced" : "primary";
+            }
+            m_displayTargetBox->setCurrentIndex(m_displayUniqueId == "primary" ? 0 : 1);
             m_newDisplayEdit->setText(config.newDisplay);
             m_cropEdit->setText(config.crop);
             m_flexDisplayCheck->setChecked(config.flexDisplay);
@@ -675,6 +715,7 @@ void Dialog::updateBootConfig(bool toView)
             config.advancedDisplay = m_advancedDisplayGroup->isChecked();
             config.displayMode = m_displayModeBox->currentIndex();
             config.displayId = m_displayIdEdit->text().trimmed();
+            config.displayUniqueId = m_displayUniqueId;
             config.newDisplay = m_newDisplayEdit->text().trimmed();
             config.crop = m_cropEdit->text().trimmed();
             config.flexDisplay = m_flexDisplayCheck->isChecked();
@@ -787,7 +828,7 @@ void Dialog::closeEvent(QCloseEvent *event)
 
 void Dialog::on_updateDevice_clicked()
 {
-    if (checkAdbRun()) {
+    if (m_wifiConnection || checkAdbRun()) {
         return;
     }
     outLog("update devices...", false);
@@ -809,6 +850,8 @@ void Dialog::updateVideoSourceUi()
     ui->startAudioBtn->setEnabled(!camera);
     if (m_advancedDisplayGroup) {
         m_advancedDisplayGroup->setEnabled(!camera);
+        m_displayTargetBox->setEnabled(!camera && !m_displayQuery);
+        m_refreshDisplaysBtn->setEnabled(!camera && !m_displayQuery);
     }
 }
 
@@ -819,6 +862,14 @@ void Dialog::on_videoSourceBox_currentIndexChanged(int)
 
 void Dialog::on_startServerBtn_clicked()
 {
+    if (m_displayQuery) { return; }
+    const bool resolved = m_startWithResolvedDisplay;
+    m_startWithResolvedDisplay = false;
+    if (!resolved && ui->videoSourceBox->currentIndex() == qsc::VIDEO_SOURCE_DISPLAY
+            && m_displayUniqueId != "primary" && m_displayUniqueId != "advanced") {
+        refreshDisplays(true);
+        return;
+    }
     outLog("start server...", false);
 
     // this is ok that "original" toUshort is 0
@@ -1031,6 +1082,83 @@ void Dialog::on_refreshCameraBtn_clicked()
     pushAdb->push(serial, getServerPath(), Config::getInstance().getServerPath());
 }
 
+void Dialog::selectDisplayTarget(int index)
+{
+    m_displayUniqueId = m_displayTargetBox->itemData(index).toString();
+    if (m_displayUniqueId != "advanced") {
+        const int id = m_displayTargetBox->itemData(index, Qt::UserRole + 1).toInt();
+        m_advancedDisplayGroup->setChecked(true);
+        m_displayModeBox->setCurrentIndex(id == 0 ? 0 : 1);
+        m_displayIdEdit->setText(QString::number(id));
+    }
+    updateBootConfig(false);
+}
+
+void Dialog::refreshDisplays(bool startAfterRefresh)
+{
+    const QString serial = ui->serialBox->currentText().trimmed();
+    if (serial.isEmpty() || m_displayQuery) { return; }
+    auto *query = new qsc::AdbProcess(this);
+    m_displayQuery = query;
+    m_displayTargetBox->setEnabled(false);
+    m_refreshDisplaysBtn->setEnabled(false);
+    ui->startServerBtn->setEnabled(false);
+    connect(query, &qsc::AdbProcess::adbProcessResult, this,
+            [this, query, serial, startAfterRefresh](qsc::AdbProcess::ADB_EXEC_RESULT result) {
+        if (result == qsc::AdbProcess::AER_SUCCESS_START || m_displayQuery != query) { return; }
+        m_displayQuery = nullptr;
+        ui->startServerBtn->setEnabled(true);
+        updateVideoSourceUi();
+        const QString output = query->getStdOut();
+        query->deleteLater();
+        if (serial != ui->serialBox->currentText().trimmed()) {
+            QTimer::singleShot(0, this, [this] { refreshDisplays(); });
+            return;
+        }
+        const auto displays = parseDisplayTargets(output);
+        if (result != qsc::AdbProcess::AER_SUCCESS_EXEC || displays.isEmpty()) {
+            outLog(tr("Could not read displays. Reconnect the phone and refresh displays."));
+            return;
+        }
+        m_displayListSerial = serial;
+        // Migrate an existing numeric selection once, then retain the display's stable identity.
+        if (m_displayUniqueId == "advanced" && m_advancedDisplayGroup->isChecked() && m_displayModeBox->currentIndex() == 1) {
+            for (const auto &display : displays) {
+                if (display.id == m_displayIdEdit->text().toInt()) { m_displayUniqueId = display.id == 0 ? "primary" : display.uniqueId; break; }
+            }
+        }
+        const QSignalBlocker blocker(m_displayTargetBox);
+        m_displayTargetBox->clear();
+        for (const auto &display : displays) {
+            const QString label = display.id == 0 ? tr("Phone screen")
+                    : display.type == "EXTERNAL" ? tr("External display: %1").arg(display.name)
+                    : tr("Display: %1").arg(display.name);
+            m_displayTargetBox->addItem(QString("%1 (%2 × %3)").arg(label).arg(display.size.width()).arg(display.size.height()),
+                                       display.id == 0 ? "primary" : display.uniqueId);
+            m_displayTargetBox->setItemData(m_displayTargetBox->count() - 1, display.id, Qt::UserRole + 1);
+        }
+        m_displayTargetBox->addItem(tr("Advanced display settings"), "advanced");
+        int index = m_displayTargetBox->findData(m_displayUniqueId);
+        const bool available = index >= 0;
+        if (!available) {
+            m_displayTargetBox->addItem(tr("Selected display is disconnected"), m_displayUniqueId);
+            index = m_displayTargetBox->count() - 1;
+            m_displayTargetBox->setItemData(index, -1, Qt::UserRole + 1);
+        }
+        m_displayTargetBox->setCurrentIndex(index);
+        if (available) { selectDisplayTarget(index); }
+        if (startAfterRefresh) {
+            if (!available) { outLog(tr("Connect the selected display or choose another screen.")); return; }
+            m_startWithResolvedDisplay = true;
+            on_startServerBtn_clicked();
+        }
+    });
+    QTimer::singleShot(5000, query, [this, query] {
+        if (m_displayQuery == query && query->isRuning()) { query->kill(); }
+    });
+    query->execute(serial, QStringList() << "shell" << "cmd" << "display" << "get-displays");
+}
+
 void Dialog::refreshApps()
 {
     const QString serial = ui->serialBox->currentText().trimmed();
@@ -1181,14 +1309,7 @@ void Dialog::on_startAdbdBtn_clicked()
 
 void Dialog::outLog(const QString &log, bool newLine)
 {
-    // avoid sub thread update ui
-    QString backLog = log;
-    QTimer::singleShot(0, this, [this, backLog, newLine]() {
-        ui->outEdit->append(backLog);
-        if (newLine) {
-            ui->outEdit->append("<br/>");
-        }
-    });
+    m_logBuffer.append(log, newLine);
 }
 
 bool Dialog::filterLog(const QString &log)
@@ -1449,39 +1570,38 @@ int Dialog::findDeviceFromeSerialBox(bool wifi)
 
 void Dialog::on_wifiConnectBtn_clicked()
 {
-    on_stopAllServerBtn_clicked();
-    delayMs(200);
-
-    on_updateDevice_clicked();
-    delayMs(200);
-
-    int firstUsbDevice = findDeviceFromeSerialBox(false);
-    if (-1 == firstUsbDevice) {
-        qWarning() << "No use device is found!";
-        return;
-    }
-    ui->serialBox->setCurrentIndex(firstUsbDevice);
-
-    on_getIPBtn_clicked();
-    delayMs(200);
-
-    on_startAdbdBtn_clicked();
-    delayMs(1000);
-
-    on_wirelessConnectBtn_clicked();
-    delayMs(2000);
-
-    on_updateDevice_clicked();
-    delayMs(200);
-
-    int firstWifiDevice = findDeviceFromeSerialBox(true);
-    if (-1 == firstWifiDevice) {
-        qWarning() << "No wifi device is found!";
-        return;
-    }
-    ui->serialBox->setCurrentIndex(firstWifiDevice);
-
-    on_startServerBtn_clicked();
+    if (m_wifiConnection || checkAdbRun()) { return; }
+    const QString preferred = ui->serialBox->currentText().trimmed();
+    m_autoUpdatetimer.stop();
+    ui->wifiConnectBtn->setEnabled(false);
+    auto *connection = new WifiConnection(this);
+    m_wifiConnection = connection;
+    connection->log = [this](const QString &text) { outLog(text); };
+    connection->finished = [this](const QString &address, const QString &error) {
+        m_wifiConnection = nullptr;
+        ui->wifiConnectBtn->setEnabled(true);
+        if (ui->autoUpdatecheckBox->isChecked()) { m_autoUpdatetimer.start(5000); }
+        if (address.isEmpty()) {
+            outLog(error);
+            QMessageBox::warning(this, tr("Wi-Fi"), error);
+            return;
+        }
+        const int colon = address.lastIndexOf(':');
+        ui->deviceIpEdt->setEditText(address.left(colon));
+        ui->devicePortEdt->setEditText(address.mid(colon + 1));
+        saveIpHistory(address.left(colon));
+        savePortHistory(address.mid(colon + 1));
+        int index = ui->serialBox->findText(address);
+        if (index < 0) {
+            ui->serialBox->addItem(address);
+            ui->connectedPhoneList->addItem(Config::getInstance().getNickName(address) + "-" + address);
+            index = ui->serialBox->count() - 1;
+        }
+        ui->serialBox->setCurrentIndex(index);
+        outLog(QStringLiteral("无线连接及设备身份验证成功：") + address);
+        on_startServerBtn_clicked();
+    };
+    connection->start(preferred);
 }
 
 void Dialog::on_connectedPhoneList_itemDoubleClicked(QListWidgetItem *item)
@@ -1522,6 +1642,11 @@ void Dialog::on_useSingleModeCheck_clicked()
 void Dialog::on_serialBox_currentIndexChanged(const QString &arg1)
 {
     ui->userNameEdt->setText(Config::getInstance().getNickName(arg1));
+    if (m_displayTargetBox && !arg1.isEmpty()) {
+        QTimer::singleShot(0, this, [this] {
+            if (ui->serialBox->currentText().trimmed() != m_displayListSerial) { refreshDisplays(); }
+        });
+    }
 }
 
 quint32 Dialog::getBitRate()

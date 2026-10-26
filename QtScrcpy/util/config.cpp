@@ -279,6 +279,7 @@ void Config::setUserBootConfig(const UserBootConfig &config)
     m_userData->setValue("AdvancedDisplay", config.advancedDisplay);
     m_userData->setValue("DisplayMode", config.displayMode);
     m_userData->setValue("DisplayId", config.displayId);
+    m_userData->setValue("DisplayUniqueId", config.displayUniqueId);
     m_userData->setValue("NewDisplay", config.newDisplay);
     m_userData->setValue("Crop", config.crop);
     m_userData->setValue("FlexDisplay", config.flexDisplay);
@@ -325,6 +326,7 @@ UserBootConfig Config::getUserBootConfig()
     config.advancedDisplay = m_userData->value("AdvancedDisplay", false).toBool();
     config.displayMode = m_userData->value("DisplayMode", 0).toInt();
     config.displayId = m_userData->value("DisplayId", "").toString();
+    config.displayUniqueId = m_userData->value("DisplayUniqueId", "").toString();
     config.newDisplay = m_userData->value("NewDisplay", "").toString();
     config.crop = m_userData->value("Crop", "").toString();
     config.flexDisplay = m_userData->value("FlexDisplay", false).toBool();

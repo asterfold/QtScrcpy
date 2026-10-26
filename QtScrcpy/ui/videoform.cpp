@@ -25,6 +25,7 @@
 #include "mousetap/mousetap.h"
 #include "ui_videoform.h"
 #include "videoform.h"
+#include "../QtScrcpyCore/src/common/mousediagnostics.h"
 
 #ifdef Q_OS_MACOS
 #include "metalvideowindow.h"
@@ -33,6 +34,14 @@
 VideoForm::VideoForm(bool framelessWindow, bool skin, bool showToolbar, int decodeMode, QWidget *parent) : QWidget(parent), ui(new Ui::videoForm), m_skin(skin), m_decodeMode(decodeMode)
 {
     ui->setupUi(this);
+    auto *diagnostics = new QTimer(this);
+    connect(diagnostics, &QTimer::timeout, this, [this] {
+        mouseDiagnostic(QString("window moves=%1 forwarded=%2 active=%3 visible=%4")
+                        .arg(m_diagnosticMoves).arg(m_diagnosticForwarded)
+                        .arg(isActiveWindow()).arg(isVisible()));
+        m_diagnosticMoves = m_diagnosticForwarded = 0;
+    });
+    diagnostics->start(2000);
     m_flexResizeTimer.setSingleShot(true);
     m_flexResizeTimer.setInterval(300);
     connect(&m_flexResizeTimer, &QTimer::timeout, this, [this]() {
@@ -56,6 +65,7 @@ VideoForm::VideoForm(bool framelessWindow, bool skin, bool showToolbar, int deco
 
 VideoForm::~VideoForm()
 {
+    MouseTap::getInstance()->releaseRelativeMotionHandler(this);
     delete ui;
 }
 
@@ -632,6 +642,20 @@ void VideoForm::updateFPS(quint32 fps)
 
 void VideoForm::grabCursor(bool grab)
 {
+    if (grab) {
+        MouseTap::getInstance()->setRelativeMotionHandler(this, [this](QPointF delta) {
+            auto device = qsc::IDeviceManage::getInstance().getDevice(m_serial);
+            QWidget *vw = videoWidget();
+            if (!device || !vw || !device->isCurrentCustomKeymap()) { return; }
+            ++m_diagnosticMoves;
+            ++m_diagnosticForwarded;
+            // This source marks an app-owned relative delta, not a screen position.
+            QMouseEvent relative(QEvent::MouseMove, delta, delta, QPointF(QCursor::pos()),
+                                 Qt::NoButton, QApplication::mouseButtons(), QApplication::keyboardModifiers(),
+                                 Qt::MouseEventSynthesizedByApplication);
+            emit device->mouseEvent(&relative, m_frameSize, vw->size());
+        });
+    }
     QRect rc = getGrabCursorRect();
     MouseTap::getInstance()->enableMouseEventTap(rc, grab);
 }
@@ -771,6 +795,8 @@ void VideoForm::mouseReleaseEvent(QMouseEvent *event)
 
 void VideoForm::mouseMoveEvent(QMouseEvent *event)
 {
+    if (MouseTap::getInstance()->hasRelativeCapture()) { return; }
+    ++m_diagnosticMoves;
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QPointF localPos = event->localPos();
         QPointF globalPos = event->globalPos();
@@ -785,6 +811,7 @@ void VideoForm::mouseMoveEvent(QMouseEvent *event)
             return;
         }
         QPointF mappedPos = vw->mapFrom(this, localPos.toPoint());
+        ++m_diagnosticForwarded;
         QMouseEvent newEvent(event->type(), mappedPos, globalPos, event->button(), event->buttons(), event->modifiers());
         emit device->mouseEvent(&newEvent, m_frameSize, vw->size());
     } else if (!m_dragPosition.isNull()) {
